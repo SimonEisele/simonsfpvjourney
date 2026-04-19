@@ -21,10 +21,23 @@ export class Videomodal implements OnInit, OnDestroy, AfterViewInit, OnChanges {
   @ViewChild('contentRoot') contentRoot?: ElementRef<HTMLDivElement>;
   @ViewChild('infoPane') infoPane?: ElementRef<HTMLDivElement>;
   @ViewChild('bodyRef') bodyRef?: ElementRef<HTMLDivElement>;
-  
+  private readonly embedOrigin = typeof window !== 'undefined' ? window.location.origin : '';
+
   get youtubeUrl() {
         if (!this.video) return '';
-        return `https://www.youtube.com/embed/${this.video.youtube_id}`;
+        const params = new URLSearchParams({
+          rel: '0',
+          modestbranding: '1',
+          playsinline: '1',
+          fs: '1',
+          vq: 'hd1080',
+        });
+
+        if (this.embedOrigin) {
+          params.set('origin', this.embedOrigin);
+        }
+
+        return `https://www.youtube-nocookie.com/embed/${this.video.youtube_id}?${params.toString()}`;
   }
 
   get tagList(): string {

@@ -2,14 +2,19 @@ from rest_framework import viewsets, generics, filters  # type: ignore
 from django_filters.rest_framework import DjangoFilterBackend  # type: ignore
 from django.db.models import Count
 from django.utils import translation
+from django.conf import settings
+from django.core.management import call_command
+from io import StringIO
+import secrets
 
 from .models import Video, Category, Tag, Drone, Picture, Feedback
 from .serializers import VideoSerializer, CategorySerializer, TagSerializer, DroneSerializer, PictureSerializer
 from .serializers import FeedbackSerializer
 from rest_framework.parsers import MultiPartParser, FormParser  # type: ignore
-from rest_framework.decorators import action  # type: ignore
+from rest_framework.decorators import action, api_view, permission_classes  # type: ignore
 from rest_framework.response import Response  # type: ignore
 from rest_framework import status  # type: ignore
+from rest_framework.permissions import AllowAny  # type: ignore
 
 
 # ----------------------------------------------------------------------------------------------------
@@ -192,3 +197,48 @@ class FeedbackViewSet(viewsets.ModelViewSet):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def trigger_fetch_video_stats(request):
+    """Run fetch_video_stats via a token-protected endpoint.
+
+    Send header: X-Cron-Token: <CRON_TRIGGER_TOKEN>
+    """
+    expected = settings.CRON_TRIGGER_TOKEN
+    provided = request.headers.get('X-Cron-Token', '')
+
+    if not expected:
+        return Response(
+            {'detail': 'CRON_TRIGGER_TOKEN is not configured on the server.'},
+            status=status.HTTP_503_SERVICE_UNAVAILABLE,
+        )
+
+    if not provided or not secrets.compare_digest(provided, expected):
+        return Response({'detail': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
+
+    out = StringIO()
+    err = StringIO()
+
+    try:
+        call_command('fetch_video_stats', stdout=out, stderr=err)
+    except Exception as exc:
+        return Response(
+            {
+                'ok': False,
+                'error': str(exc),
+                'stdout': out.getvalue(),
+                'stderr': err.getvalue(),
+            },
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
+
+    return Response(
+        {
+            'ok': True,
+            'stdout': out.getvalue(),
+            'stderr': err.getvalue(),
+        },
+        status=status.HTTP_200_OK,
+    )

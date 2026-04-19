@@ -1,6 +1,6 @@
 from pathlib import Path
 import os
-import dj_database_url
+import dj_database_url  # type: ignore
 
 # =========================================================
 # BASE
@@ -199,3 +199,4 @@ CLOUDINARY_STORAGE = {
 # =========================================================
 
 YOUTUBE_API_KEY = os.environ.get('YOUTUBE_API_KEY', '')
+CRON_TRIGGER_TOKEN = os.environ.get('CRON_TRIGGER_TOKEN', '')

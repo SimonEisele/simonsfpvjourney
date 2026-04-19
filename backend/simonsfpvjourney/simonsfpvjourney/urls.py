@@ -10,7 +10,7 @@ urlpatterns = [
     path('api/', include('videos.urls')),
     # Route direct browser hits on backend domain to the SPA frontend.
     re_path(
-        r'^(?!api/|admin/)(?P<path>.*)$',
+        r'^(?!(api(?:/|$)|admin(?:/|$)))(?P<path>.*)$',
         RedirectView.as_view(
             url=f'{FRONTEND_URL}/%(path)s',
             permanent=False,

@@ -1,119 +1,113 @@
 .navbar {
-  height: 72px;
+  min-height: var(--nav-height);
   width: 100%;
-  background: linear-gradient(
-    180deg,
-    rgba(10, 10, 15, 0.95),
-    rgba(5, 5, 8, 0.85)
-  );
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  background: rgba(6, 12, 22, 0.78);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid rgba(174, 193, 222, 0.14);
+  box-shadow: 0 14px 40px rgba(4, 8, 16, 0.28);
   z-index: 1000;
 }
 
 .navbar-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
   font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  font-size: 1rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  color: #ffffff;
-  transition: transform 0.3s ease;
+  letter-spacing: 0.03em;
+  font-size: 0.95rem;
+  text-decoration: none;
+  color: var(--text);
+  transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .navbar-brand:hover {
-  transform: scale(1.05);
-  color: #58e6ff;
+  transform: translateY(-1px);
+  color: var(--accent);
 }
 
-/* Brand */
-.fpv-title {
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  font-size: 1rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-alt));
+  color: #05131d;
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  box-shadow: 0 10px 24px rgba(36, 200, 244, 0.22);
 }
 
-/* Links */
 .fpv-link {
   position: relative;
-  color: rgba(255, 255, 255, 0.85);
-  text-transform: uppercase;
+  color: rgba(237, 244, 255, 0.78);
   font-size: 0.85rem;
-  letter-spacing: 0.15em;
-  padding: 0.5rem 0;
-  transition: all 0.3s ease;
+  letter-spacing: 0.12em;
+  padding: 0.65rem 0.9rem;
+  transition: all 0.2s ease;
   font-weight: 500;
+  border-radius: 999px;
+  text-decoration: none;
 }
 
-/* Hover underline animation */
 .fpv-link::after {
   content: "";
   position: absolute;
-  left: 50%;
-  bottom: -4px;
-  width: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #58e6ff, #008dce);
-  border-radius: 2px;
-  transition: all 0.3s ease;
-  transform: translateX(-50%);
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(111, 231, 255, 0.14), rgba(138, 151, 255, 0.12));
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: -1;
 }
 
 .fpv-link:hover {
-  color: #ffffff;
-  text-shadow: 0 0 8px rgba(88, 230, 255, 0.6);
+  color: var(--text);
+  transform: translateY(-1px);
 }
 
 .fpv-link:hover::after {
-  width: 100%;
+  opacity: 1;
 }
 
-/* Active route */
 .fpv-link.active {
-  color: #58e6ff;
-  text-shadow: 0 0 8px rgba(88, 230, 255, 0.6);
+  color: var(--accent);
+  background: rgba(111, 231, 255, 0.08);
+  border: 1px solid rgba(111, 231, 255, 0.16);
 }
 
-.fpv-link.active::after {
-  width: 100%;
-}
-
-/* Mobile tweaks */
 @media (max-width: 991px) {
   .fpv-link {
-    padding: 0.75rem 0;
+    padding: 0.8rem 0.95rem;
     font-size: 0.9rem;
   }
 
-  .navbar-brand {
+  .brand-text {
     font-size: 0.9rem;
   }
 
-  /* Expanded menu background */
   .navbar-collapse.show {
     position: absolute;
-    top: 72px; /* below fixed navbar */
+    top: var(--nav-height);
     left: 0;
     right: 0;
     width: 100%;
-    background: linear-gradient(180deg, rgba(10,10,15,0.96), rgba(5,5,8,0.92));
-    backdrop-filter: blur(8px);
-    border-top: 1px solid rgba(255,255,255,0.1);
-    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
-    padding: 1rem 1.25rem;
+    background: rgba(6, 12, 22, 0.96);
+    backdrop-filter: blur(18px);
+    border-top: 1px solid rgba(174, 193, 222, 0.12);
+    box-shadow: 0 20px 40px rgba(4, 8, 16, 0.3);
+    padding: 1rem 1rem 1.2rem;
   }
 
   .navbar-nav {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.25rem;
+    gap: 0.35rem;
   }
 }
 
-/* Minimal collapse behavior without Bootstrap JS */
 .collapse {
   display: none;
 }
@@ -132,18 +126,15 @@
   }
 }
 
-/* Toggler styling since Bootstrap CSS/JS may be absent */
 .navbar-toggler {
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 6px;
-  padding: 0.25rem 0.5rem;
-  color: #fff;
-  background: rgba(255,255,255,0.08);
+  border-radius: 999px;
+  padding: 0.45rem 0.7rem;
+  color: var(--text);
 }
 
 .navbar-toggler:focus {
   outline: none;
-  box-shadow: 0 0 0 0.2rem rgba(88, 230, 255, 0.3);
+  box-shadow: 0 0 0 0.2rem rgba(111, 231, 255, 0.22);
 }
 
 .navbar-toggler-icon {
@@ -160,7 +151,7 @@
   left: 0;
   width: 24px;
   height: 2px;
-  background: #fff;
+  background: currentColor;
   border-radius: 2px;
 }
 
@@ -172,7 +163,6 @@
   top: 6px;
 }
 
-/* Ensure links align to right on desktop */
 .navbar-nav {
   margin-left: auto;
   justify-content: end;

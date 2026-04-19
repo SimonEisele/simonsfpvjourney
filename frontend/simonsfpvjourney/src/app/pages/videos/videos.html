@@ -23,7 +23,7 @@
              *ngFor="let s of getSuggestions()"
              (click)="selectSuggestion(s)">
           <span class="label">{{ s.label }}</span>
-          <span class="type">{{ s.type }}</span>
+          <span class="type">{{ s.type }} · {{ s.count }} video{{ s.count === 1 ? '' : 's' }}</span>
         </div>
       </div>
     </div>
@@ -77,10 +77,9 @@
       <label>Season</label>
       <select [(ngModel)]="filter.season" (change)="applyFilter()">
         <option value="">All ({{ facetCounts.seasons['__all__'] ?? videosSnapshot.length }})</option>
-        <option value="spring" *ngIf="(facetCounts.seasons['spring'] ?? 0) > 0">Spring ({{ facetCounts.seasons['spring'] ?? 0 }})</option>
-        <option value="summer" *ngIf="(facetCounts.seasons['summer'] ?? 0) > 0">Summer ({{ facetCounts.seasons['summer'] ?? 0 }})</option>
-        <option value="autumn" *ngIf="(facetCounts.seasons['autumn'] ?? 0) > 0">Autumn ({{ facetCounts.seasons['autumn'] ?? 0 }})</option>
-        <option value="winter" *ngIf="(facetCounts.seasons['winter'] ?? 0) > 0">Winter ({{ facetCounts.seasons['winter'] ?? 0 }})</option>
+        <option *ngFor="let season of getSeasonOptions()" [value]="season.value">
+          {{ season.label }} ({{ season.count }})
+        </option>
       </select>
     </div>
 
@@ -89,11 +88,9 @@
       <label>Weather</label>
       <select [(ngModel)]="filter.weather" (change)="applyFilter()">
         <option value="">All ({{ facetCounts.weathers['__all__'] ?? videosSnapshot.length }})</option>
-        <option value="sunny" *ngIf="(facetCounts.weathers['sunny'] ?? 0) > 0">Sunny ({{ facetCounts.weathers['sunny'] ?? 0 }})</option>
-        <option value="cloudy" *ngIf="(facetCounts.weathers['cloudy'] ?? 0) > 0">Cloudy ({{ facetCounts.weathers['cloudy'] ?? 0 }})</option>
-        <option value="rainy" *ngIf="(facetCounts.weathers['rainy'] ?? 0) > 0">Rainy ({{ facetCounts.weathers['rainy'] ?? 0 }})</option>
-        <option value="snowy" *ngIf="(facetCounts.weathers['snowy'] ?? 0) > 0">Snowy ({{ facetCounts.weathers['snowy'] ?? 0 }})</option>
-        <option value="foggy" *ngIf="(facetCounts.weathers['foggy'] ?? 0) > 0">Foggy ({{ facetCounts.weathers['foggy'] ?? 0 }})</option>
+        <option *ngFor="let weather of getWeatherOptions()" [value]="weather.value">
+          {{ weather.label }} ({{ weather.count }})
+        </option>
       </select>
     </div>
 
@@ -126,11 +123,9 @@
       <label>Time of Day</label>
       <select [(ngModel)]="filter.time_of_day" (change)="applyFilter()">
         <option value="">All ({{ facetCounts.times['__all__'] ?? videosSnapshot.length }})</option>
-        <option value="morning" *ngIf="(facetCounts.times['morning'] ?? 0) > 0">Morning ({{ facetCounts.times['morning'] ?? 0 }})</option>
-        <option value="noon" *ngIf="(facetCounts.times['noon'] ?? 0) > 0">Noon ({{ facetCounts.times['noon'] ?? 0 }})</option>
-        <option value="afternoon" *ngIf="(facetCounts.times['afternoon'] ?? 0) > 0">Afternoon ({{ facetCounts.times['afternoon'] ?? 0 }})</option>
-        <option value="evening" *ngIf="(facetCounts.times['evening'] ?? 0) > 0">Evening ({{ facetCounts.times['evening'] ?? 0 }})</option>
-        <option value="night" *ngIf="(facetCounts.times['night'] ?? 0) > 0">Night ({{ facetCounts.times['night'] ?? 0 }})</option>
+        <option *ngFor="let time of getTimeOptions()" [value]="time.value">
+          {{ time.label }} ({{ time.count }})
+        </option>
       </select>
     </div>
 

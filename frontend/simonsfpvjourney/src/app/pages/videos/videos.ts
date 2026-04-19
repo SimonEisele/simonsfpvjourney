@@ -16,6 +16,7 @@ import { RouterModule } from '@angular/router';
   styleUrl: './videos.css',
 })
 export class Videos {
+  private readonly advancedFiltersStorageKey = 'simonsfpvjourney.videos.showAdvancedFilters';
   videos$!: Observable<Video[]>;
   videosSnapshot: Video[] = [];
   visibleVideosSnapshot: Video[] = [];
@@ -49,54 +50,89 @@ export class Videos {
   showAdvancedFilters = false;
   availableCountries: string[] = [];
   showSuggestions = false;
-  
+
+  private readonly seasonOptions = [
+    { value: 'Spring', label: 'Spring' },
+    { value: 'Summer', label: 'Summer' },
+    { value: 'Autumn', label: 'Autumn' },
+    { value: 'Winter', label: 'Winter' },
+  ];
+
+  private readonly weatherOptions = [
+    { value: 'Sunny', label: 'Sunny' },
+    { value: 'Cloudy', label: 'Cloudy' },
+    { value: 'Rainy', label: 'Rainy' },
+    { value: 'Snowy', label: 'Snowy' },
+    { value: 'Foggy', label: 'Foggy' },
+  ];
+
+  private readonly timeOptions = [
+    { value: 'Morning', label: 'Morning' },
+    { value: 'Afternoon', label: 'Afternoon' },
+    { value: 'Evening', label: 'Evening' },
+    { value: 'Night', label: 'Night' },
+    { value: 'Sunrise', label: 'Sunrise' },
+    { value: 'Golden Hour', label: 'Golden Hour' },
+    { value: 'Sunset', label: 'Sunset' },
+  ];
+
   // Search suggestions dropdown
-  getSuggestions(): Array<{ label: string; type: 'Video' | 'Category' | 'Tag' | 'Drone' }> {
+  getSuggestions(): Array<{ label: string; count: number; type: 'Video' | 'Category' | 'Tag'; value: string | number }> {
     const q = (this.searchText || '').trim().toLowerCase();
     const max = 12;
-    const pool: Array<{ label: string; type: 'Video' | 'Category' | 'Tag' | 'Drone' }> = [];
+    const suggestions: Array<{ label: string; count: number; type: 'Video' | 'Category' | 'Tag'; value: string | number }> = [];
 
-    // Collect from videos, categories, tags, drones
-    for (const v of this.videosSnapshot) {
-      if (!v?.title) continue;
-      const label = v.title;
-      if (!q || label.toLowerCase().includes(q)) {
-        pool.push({ label, type: 'Video' });
-      }
-    }
-    for (const c of this.categories) {
-      const label = c.name;
-      if (!q || label.toLowerCase().includes(q)) {
-        pool.push({ label, type: 'Category' });
-      }
-    }
-    for (const t of this.tags) {
-      const label = t.name;
-      if (!q || label.toLowerCase().includes(q)) {
-        pool.push({ label, type: 'Tag' });
-      }
-    }
-    for (const d of this.drones) {
-      const label = d.name;
-      if (!q || label.toLowerCase().includes(q)) {
-        pool.push({ label, type: 'Drone' });
-      }
+    for (const video of this.videosSnapshot) {
+      if (!video?.title) continue;
+      const label = video.title.trim();
+      if (!label) continue;
+      if (q && !label.toLowerCase().includes(q)) continue;
+      suggestions.push({ label, count: 1, type: 'Video', value: label });
     }
 
-    // Deduplicate by label, preserve first type encountered
+    for (const category of this.categories) {
+      const label = category.name.trim();
+      if (!label) continue;
+      if (q && !label.toLowerCase().includes(q)) continue;
+      const count = this.facetCounts.categories?.[category.id] ?? 0;
+      if (count <= 0) continue;
+      suggestions.push({ label, count, type: 'Category', value: category.id });
+    }
+
+    for (const tag of this.tags) {
+      const label = tag.name.trim();
+      if (!label) continue;
+      if (q && !label.toLowerCase().includes(q)) continue;
+      const count = this.facetCounts.tags?.[tag.id] ?? 0;
+      if (count <= 0) continue;
+      suggestions.push({ label, count, type: 'Tag', value: tag.id });
+    }
+
     const seen = new Set<string>();
-    const out: Array<{ label: string; type: 'Video' | 'Category' | 'Tag' | 'Drone' }> = [];
-    for (const item of pool) {
-      if (seen.has(item.label)) continue;
-      seen.add(item.label);
-      out.push(item);
-      if (out.length >= max) break;
-    }
-    return out;
+    return suggestions
+      .filter(item => item.count > 0)
+      .filter(item => {
+        const key = `${item.type}:${item.label}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .sort((a, b) => b.count - a.count || a.type.localeCompare(b.type) || a.label.localeCompare(b.label))
+      .slice(0, max);
   }
 
-  selectSuggestion(s: { label: string; type: string }): void {
+  selectSuggestion(s: { label: string; count: number; type: 'Video' | 'Category' | 'Tag'; value: string | number }): void {
     this.searchText = s.label;
+
+    if (s.type === 'Category') {
+      this.filter.category = String(s.value);
+    } else if (s.type === 'Tag') {
+      const tagId = Number(s.value);
+      const tags = new Set<number>(this.filter.tags ?? []);
+      tags.add(tagId);
+      this.filter.tags = Array.from(tags);
+    }
+
     this.applyFilter();
     this.showSuggestions = false;
   }
@@ -107,6 +143,13 @@ export class Videos {
   ) {}
 
   ngOnInit(): void {
+    const savedFilter = this.videoService.getCurrentFilter();
+    if (savedFilter) {
+      this.filter = { order_by: 'views_current', order_dir: 'desc', ...savedFilter };
+      this.searchText = savedFilter.search ?? '';
+    }
+    this.showAdvancedFilters = this.loadSavedAdvancedFiltersState();
+
     // Load Categories, Tags, Drones
     this.metaService.getCategories().subscribe(c => this.categories = c);
     this.metaService.getTags().subscribe(t => this.tags = t);
@@ -115,8 +158,8 @@ export class Videos {
     // Videos laden
     this.videoService.loadVideos();
 
-    // Set default sorting (views desc)
-    this.videoService.setFilter(this.filter);
+    // Set current filter (restored from localStorage or defaults)
+    this.applyFilter();
 
     // Observable für die Liste
     this.videos$ = this.videoService.filteredVideos$;
@@ -147,6 +190,34 @@ export class Videos {
   }
   toggleAdvanced(): void {
     this.showAdvancedFilters = !this.showAdvancedFilters;
+    this.saveAdvancedFiltersState(this.showAdvancedFilters);
+  }
+
+  getSeasonOptions(): Array<{ value: string; label: string; count: number }> {
+    return this.seasonOptions
+      .map(option => ({
+        ...option,
+        count: this.facetCounts.seasons?.[option.value] ?? 0,
+      }))
+      .filter(option => option.count > 0);
+  }
+
+  getWeatherOptions(): Array<{ value: string; label: string; count: number }> {
+    return this.weatherOptions
+      .map(option => ({
+        ...option,
+        count: this.facetCounts.weathers?.[option.value] ?? 0,
+      }))
+      .filter(option => option.count > 0);
+  }
+
+  getTimeOptions(): Array<{ value: string; label: string; count: number }> {
+    return this.timeOptions
+      .map(option => ({
+        ...option,
+        count: this.facetCounts.times?.[option.value] ?? 0,
+      }))
+      .filter(option => option.count > 0);
   }
 
   /** Filter anwenden */
@@ -164,7 +235,7 @@ export class Videos {
 
   /** Filter zurücksetzen */
   resetFilter(): void {
-    this.filter = {};
+    this.filter = { order_by: 'views_current', order_dir: 'desc' };
     this.searchText = '';
     this.videoService.setFilter(null);
   }
@@ -214,5 +285,25 @@ export class Videos {
     this.filter.tags = Array.from(tags);
     this.selectedTagToAdd = null;
     this.applyFilter();
+  }
+
+  onFilterChange(): void {
+    this.applyFilter();
+  }
+
+  private loadSavedAdvancedFiltersState(): boolean {
+    if (typeof localStorage === 'undefined') return false;
+    try {
+      return localStorage.getItem(this.advancedFiltersStorageKey) === 'true';
+    } catch {
+      return false;
+    }
+  }
+
+  private saveAdvancedFiltersState(isOpen: boolean): void {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      localStorage.setItem(this.advancedFiltersStorageKey, String(isOpen));
+    } catch {}
   }
 }

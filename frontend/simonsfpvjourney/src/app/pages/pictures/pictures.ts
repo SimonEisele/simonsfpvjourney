@@ -3,6 +3,7 @@ import { Component, HostListener } from '@angular/core';
 import { Picture } from '../../models/picture.model';
 import { RouterModule } from '@angular/router';
 import { VideoService } from '../../services/video.service';
+import { Video } from '../../models/video.model';
 
 @Component({
   selector: 'app-pictures',
@@ -24,24 +25,27 @@ export class Pictures {
 
   ngOnInit(): void {
     this.videoService.loadVideos();
-    this.videoService.videos$.subscribe(videos => {
-      // Flatten nested pictures from videos into one list with parent video info
-      const flattened: Picture[] = [];
-      for (const v of videos) {
-        const pics = (v.pictures ?? []).map(p => ({
-          id: p.id,
-          image: p.image,
-          video: v.id,
-          video_title: v.title,
-          video_latitude: v.latitude,
-          video_longitude: v.longitude,
-          video_place: v.place ?? '',
-          created_at: p.created_at,
-        }));
-        flattened.push(...pics);
-      }
-      this.pictures = flattened;
+    this.videoService.filteredVideos$.subscribe(videos => {
+      this.pictures = this.flattenPictures(videos);
     });
+  }
+
+  private flattenPictures(videos: Video[]): Picture[] {
+    const flattened: Picture[] = [];
+    for (const video of videos) {
+      const pics = (video.pictures ?? []).map(p => ({
+        id: p.id,
+        image: p.image,
+        video: video.id,
+        video_title: video.title,
+        video_latitude: video.latitude,
+        video_longitude: video.longitude,
+        video_place: video.place ?? '',
+        created_at: p.created_at,
+      }));
+      flattened.push(...pics);
+    }
+    return flattened;
   }
 
   openFullscreen(pic: Picture): void {

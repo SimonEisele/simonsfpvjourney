@@ -1,27 +1,27 @@
-/* Container */
 .gear-container {
-  margin: 1rem auto 2rem;
-  padding: 0 1rem;
-  max-width: 1200px;
+  width: min(var(--page-max), calc(100vw - 2rem));
+  margin: 0 auto;
+  padding: 1.5rem 0 2.5rem;
 }
 
 .gear-title {
   text-align: center;
-  font-size: 2.2rem;
-  margin: 0.25rem 0 0.25rem;
+  font-size: clamp(2rem, 4vw, 3.3rem);
+  margin: 0;
 }
 
 .gear-subtitle {
   text-align: center;
-  color: #667085;
-  margin-bottom: 1.25rem;
+  color: var(--muted);
+  margin: 0.75rem auto 0;
+  max-width: 62ch;
 }
 
-/* Grid */
 .gear-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
+  margin-top: 1.5rem;
 }
 
 @media (max-width: 768px) {
@@ -30,18 +30,16 @@
   }
 }
 
-/* Card */
 .gear-card {
-  background: #fff;
-  border: 1px solid #e6e9ef;
-  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(16, 28, 49, 0.9), rgba(8, 15, 26, 0.96));
+  border: 1px solid rgba(174, 193, 222, 0.14);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 8px 24px rgba(16,24,40,0.08);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow-md);
 }
 .gear-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 16px 32px rgba(16,24,40,0.12);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
 }
 
 .gear-image {
@@ -49,7 +47,7 @@
 }
 .gear-image img {
   width: 100%;
-  height: 260px;
+  aspect-ratio: 16 / 10;
   object-fit: cover;
   display: block;
 }
@@ -57,19 +55,19 @@
   position: absolute;
   bottom: 8px;
   right: 8px;
-  background: rgba(16,24,40,0.8);
-  color: #fff;
+  background: rgba(4, 8, 16, 0.75);
+  color: var(--text);
   padding: 2px 8px;
-  border-radius: 4px;
+  border-radius: 999px;
   font-size: 0.85rem;
 }
 
 .gear-info {
-  padding: 0.75rem;
+  padding: 0.95rem;
 }
 .gear-name {
   margin: 0 0 0.5rem;
-  font-size: 1.2rem;
+  font-size: 1.05rem;
 }
 
 .specs {
@@ -79,17 +77,17 @@
 }
 .spec {
   display: grid;
-  border: 1px solid #eef0f5;
-  border-radius: 8px;
+  border: 1px solid rgba(174, 193, 222, 0.12);
+  border-radius: 12px;
   padding: 0.4rem 0.6rem;
-  background: #fafbff;
+  background: rgba(255, 255, 255, 0.03);
 }
 .spec .label {
-  color: #667085;
+  color: var(--muted);
 }
 .spec .value {
   font-weight: 600;
-  color: #111827;
+  color: var(--text);
 }
 
 @media (max-width: 480px) {

@@ -1,33 +1,32 @@
 /* Reuse app modal styling */
 .modal-backdrop {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0,0,0,0.6);
+  inset: 0;
+  background: rgba(4, 8, 16, 0.72);
+  backdrop-filter: blur(14px);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10000; /* ensure above navbar and any overlays */
-  transform: translateZ(0); /* create topmost compositing layer on iOS Safari */
+  z-index: 10000;
+  transform: translateZ(0);
   will-change: transform;
   padding: 20px;
   box-sizing: border-box;
 }
 .modal-content {
   position: relative;
-  background-color: #282828;
-  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(16, 28, 49, 0.98), rgba(8, 15, 26, 0.98));
+  border: 1px solid rgba(174, 193, 222, 0.16);
+  border-radius: var(--radius-xl);
   padding: 20px;
   width: 100%;
   max-width: 640px;
   max-height: 90%;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
-  color: #e5e7eb;
-  overflow: hidden; /* keep container fixed so close button remains visible */
+  box-shadow: var(--shadow-lg);
+  color: var(--text);
+  overflow: hidden;
 }
 .close-btn {
   position: absolute;
@@ -42,45 +41,42 @@
   align-items: center;
   justify-content: center;
 }
-.close-btn:hover svg line { stroke: #ff6666; }
+.close-btn:hover svg line { stroke: var(--danger); }
 .fb-title { margin: 0 0 8px; }
-.fb-sub { color: #bfc4cc; margin-top: 4px; }
+.fb-sub { color: var(--muted); margin-top: 4px; }
 .fb-field { margin-top: 12px; }
-.fb-field label { display:block; font-size: 0.9rem; color:#bfc4cc; margin-bottom:6px; }
-.fb-field label span { color:#ff7a7a; margin-left:4px; }
+.fb-field label { display:block; font-size: 0.9rem; color:var(--muted-strong); margin-bottom:6px; }
+.fb-field label span { color:var(--danger); margin-left:4px; }
 .fb-field input, .fb-field textarea, .fb-field select {
   width: 100%;
-  background: #0f1218;
-  color: #e5e7eb;
-  border: 1px solid #283041;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--text);
+  border: 1px solid rgba(174, 193, 222, 0.14);
+  border-radius: 14px;
   padding: 10px 12px;
 }
 .fb-field textarea {
-  resize: vertical;            /* user can expand, but only vertically */
-  max-height: 32vh;            /* cap height to avoid pushing content out */
-  overflow: auto;              /* scroll inside textarea if content exceeds */
+  resize: vertical;
+  max-height: 32vh;
+  overflow: auto;
 }
 .fb-field .error {
-  color: #ff7a7a;
+  color: var(--danger);
   font-size: 0.85rem;
   margin-top: 6px;
 }
 .fb-grid { display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .fb-actions { margin-top: 16px; display:flex; justify-content: flex-end; }
 .fb-submit {
-  background: linear-gradient(90deg, #58e6ff, #008dce);
-  color: #0b0d10;
   font-weight: 700;
   border: none;
-  border-radius: 8px;
+  border-radius: 999px;
   padding: 10px 14px;
   cursor: pointer;
 }
-.fb-success { color: #65f386; margin-top: 10px; }
-.fb-error { color: #ff7a7a; margin-top: 10px; }
+.fb-success { color: var(--success); margin-top: 10px; }
+.fb-error { color: var(--danger); margin-top: 10px; }
 
-/* Scroll body inside modal to keep header/close fixed */
 .modal-body {
   display: flex;
   flex-direction: column;

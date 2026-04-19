@@ -3,6 +3,7 @@
   width: 100%;
   text-align: left;
   box-sizing: border-box;
+  color: var(--text);
 }
 
 .header h4 {
@@ -10,7 +11,7 @@
   padding-right: 10px;
   font-size: 16px;
   font-weight: 700;
-  color: #1c2430;
+  color: var(--text);
 }
 
 .meta {
@@ -28,9 +29,9 @@
   border-radius: 999px;
   font-size: 12px;
   line-height: 1.5;
-  background: #f0f5ff;
-  color: #173b82;
-  border: 1px solid #d5e3ff;
+  background: rgba(111, 231, 255, 0.08);
+  color: var(--text);
+  border: 1px solid rgba(111, 231, 255, 0.18);
 }
 
 .thumb {
@@ -54,10 +55,10 @@
   position: absolute;
   right: 8px;
   bottom: 8px;
-  background: rgba(16,24,40,0.85);
-  color: #fff;
+  background: rgba(4, 8, 16, 0.75);
+  color: var(--text);
   padding: 2px 6px;
-  border-radius: 4px;
+  border-radius: 999px;
   font-size: 12px;
 }
 

@@ -5,8 +5,9 @@ import { BehaviorSubject, combineLatest, map, shareReplay } from "rxjs";
 
 @Injectable({ providedIn: 'root' })
 export class VideoService {
+  private readonly filterStorageKey = 'simonsfpvjourney.videoFilter';
   private videosSubject = new BehaviorSubject<Video[]>([]);
-  private filterSubject = new BehaviorSubject<VideoFilter | null>(null);
+  private filterSubject = new BehaviorSubject<VideoFilter | null>(this.loadSavedFilter());
 
   readonly videos$ = this.videosSubject.asObservable();
   readonly filteredVideos$ = combineLatest([
@@ -28,6 +29,10 @@ export class VideoService {
 
   constructor(private http: HttpClient) {}
 
+  getCurrentFilter(): VideoFilter | null {
+    return this.filterSubject.value;
+  }
+
   loadVideos(filter?: VideoFilter) {
     this.http
       .get<Video[]>('/api/videos/', { params: filter as any })
@@ -47,7 +52,30 @@ export class VideoService {
   }
 
   setFilter(filter: VideoFilter | null) {
+    this.saveFilter(filter);
     this.filterSubject.next(filter);
+  }
+
+  private loadSavedFilter(): VideoFilter | null {
+    if (typeof localStorage === 'undefined') return null;
+    try {
+      const raw = localStorage.getItem(this.filterStorageKey);
+      if (!raw) return null;
+      return JSON.parse(raw) as VideoFilter;
+    } catch {
+      return null;
+    }
+  }
+
+  private saveFilter(filter: VideoFilter | null): void {
+    if (typeof localStorage === 'undefined') return;
+    try {
+      if (!filter) {
+        localStorage.removeItem(this.filterStorageKey);
+        return;
+      }
+      localStorage.setItem(this.filterStorageKey, JSON.stringify(filter));
+    } catch {}
   }
 
   private applyFilter(videos: Video[], filter: VideoFilter | null): Video[] {
@@ -211,7 +239,7 @@ export class VideoService {
     allWeathers.forEach(w => {
       weathers[w] = countFor({ ...baseFilter, weather: w });
     });
-    
+
     // Countries
     allCountries.forEach(c => {
       countries[c] = countFor({ ...baseFilter, country: c });

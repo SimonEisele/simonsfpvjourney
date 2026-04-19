@@ -2,6 +2,7 @@
 	width: min(var(--page-max), calc(100vw - 2rem));
 	margin: 0 auto;
 	padding: 1.5rem 0 2.5rem;
+	color: var(--text);
 }
 
 .pictures-title {
@@ -12,9 +13,16 @@
 
 .pictures-subtitle {
 	text-align: center;
-	color: var(--muted);
+	color: var(--muted-strong);
 	margin: 0.75rem auto 0;
 	max-width: 62ch;
+}
+
+.no-pictures {
+	text-align: center;
+	color: var(--muted-strong);
+	margin-top: 1rem;
+	font-size: 1rem;
 }
 
 .pictures-grid {
@@ -59,6 +67,7 @@
 .picture-info h3 {
 	margin: 0 0 0.5rem;
 	font-size: 1.1rem;
+	color: var(--text);
 }
 
 .meta {

@@ -9,7 +9,7 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key")
-DEBUG = os.environ.get("DEBUG", "False") == "True"
+DEBUG = True  # os.environ.get("DEBUG", "False") == "True"
 
 ALLOWED_HOSTS = os.environ.get(
     "ALLOWED_HOSTS",
@@ -180,6 +180,12 @@ X_FRAME_OPTIONS = 'DENY'
 # CLOUDINARY
 # =========================================================
 
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': 'dqgfjjgek',
+#     'API_KEY': '954648541277265',
+#     'API_SECRET': 'EJ9eeYIpkHu96buYldiTdQrWAE8',
+#     'SECURE': True,
+# }
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
     'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),

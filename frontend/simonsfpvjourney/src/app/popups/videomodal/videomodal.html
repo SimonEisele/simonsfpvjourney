@@ -1,0 +1,122 @@
+<div class="modal-backdrop" (click)="close()">
+  <div class="modal-content" (click)="$event.stopPropagation()" #contentRoot tabindex="0" role="dialog" aria-modal="true">
+    <button class="close-btn" (click)="close()">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="white"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+
+    <!-- Navigation arrows: visible only when switching is possible -->
+    <button class="nav-btn left" *ngIf="canPrev" (click)="prev.emit()" [class.animate]="canPrev" aria-label="Previous">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"></polyline>
+      </svg>
+    </button>
+    <button class="nav-btn right" *ngIf="canNext" (click)="next.emit()" [class.animate]="canNext" aria-label="Next">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+
+    <div class="modal-body" #bodyRef>
+      <!-- Video -->
+      <div class="video-wrapper">
+        <iframe
+          [src]="youtubeUrl | safe"
+          frameborder="0"
+          allow="autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen
+        ></iframe>
+      </div>
+
+      <!-- Infos rechts -->
+      <div class="video-info" #infoPane>
+        <h2 class="video-title">{{ video.title }}</h2>
+        <div class="chips">
+          <span class="chip location" *ngIf="video.country">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            {{ video.country | capitalize }} - {{ video.place | capitalize }}
+          </span>
+        </div>
+        <div class="tags" *ngIf="video.tags.length">
+          <span class="chip tag" *ngFor="let tag of video.tags">{{ tag.name }}</span>
+        </div>
+        <p class="video-desc" *ngIf="video.description">{{ video.description }}</p>
+
+        <div class="stats">
+          <div class="stat">
+            <span class="label">Views</span>
+            <span class="value">{{ video.views_current }}</span>
+          </div>
+          <div class="stat">
+            <span class="label">Likes</span>
+            <span class="value">{{ video.likes_current }}</span>
+          </div>
+          <div class="stat" *ngIf="video.duration">
+            <span class="label">Duration</span>
+            <span class="value">{{ video.duration }}s</span>
+          </div>
+          <div class="stat" *ngIf="video.altitude != null">
+            <span class="label">Altitude</span>
+            <span class="value">{{ video.altitude }} m</span>
+          </div>
+        </div>
+
+        <div class="details">
+          <div class="detail" *ngIf="video.category">
+            <span class="label">Category</span>
+            <span class="value">{{ video.category.name | capitalize }}</span>
+          </div>
+          <div class="detail" *ngIf="video.drone">
+            <span class="label">Drone</span>
+            <span class="value">{{ video.drone.name | capitalize }}</span>
+          </div>
+          <div class="detail" *ngIf="video.country">
+            <span class="label">Country</span>
+            <span class="value">{{ video.country | capitalize }}</span>
+          </div>
+          <div class="detail" *ngIf="video.state">
+            <span class="label">State</span>
+            <span class="value">{{ video.state | capitalize }}</span>
+          </div>
+          <div class="detail" *ngIf="video.place">
+            <span class="label">Place</span>
+            <span class="value">{{ video.place | capitalize }}</span>
+          </div>
+          
+          
+          <div class="detail" *ngIf="video.season">
+            <span class="label">Season</span>
+            <span class="value">{{ video.season | capitalize }}</span>
+          </div>
+          <div class="detail" *ngIf="video.time_of_day">
+            <span class="label">Time of day</span>
+            <span class="value">{{ video.time_of_day | capitalize }}</span>
+          </div>
+          <div class="detail" *ngIf="video.weather">
+            <span class="label">Weather</span>
+            <span class="value">{{ video.weather | capitalize }}</span>
+          </div>
+          <div class="detail" *ngIf="video.date_recorded">
+            <span class="label">Recorded</span>
+            <span class="value">{{ video.date_recorded | date:'mediumDate' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

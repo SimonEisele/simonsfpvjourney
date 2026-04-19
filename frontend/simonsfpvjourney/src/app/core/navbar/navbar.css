@@ -1,0 +1,179 @@
+.navbar {
+  height: 72px;
+  width: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 15, 0.95),
+    rgba(5, 5, 8, 0.85)
+  );
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  color: #ffffff;
+  transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+  transform: scale(1.05);
+  color: #58e6ff;
+}
+
+/* Brand */
+.fpv-title {
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-size: 1rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Links */
+.fpv-link {
+  position: relative;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  padding: 0.5rem 0;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+/* Hover underline animation */
+.fpv-link::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -4px;
+  width: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #58e6ff, #008dce);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+}
+
+.fpv-link:hover {
+  color: #ffffff;
+  text-shadow: 0 0 8px rgba(88, 230, 255, 0.6);
+}
+
+.fpv-link:hover::after {
+  width: 100%;
+}
+
+/* Active route */
+.fpv-link.active {
+  color: #58e6ff;
+  text-shadow: 0 0 8px rgba(88, 230, 255, 0.6);
+}
+
+.fpv-link.active::after {
+  width: 100%;
+}
+
+/* Mobile tweaks */
+@media (max-width: 991px) {
+  .fpv-link {
+    padding: 0.75rem 0;
+    font-size: 0.9rem;
+  }
+
+  .navbar-brand {
+    font-size: 0.9rem;
+  }
+
+  /* Expanded menu background */
+  .navbar-collapse.show {
+    position: absolute;
+    top: 72px; /* below fixed navbar */
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: linear-gradient(180deg, rgba(10,10,15,0.96), rgba(5,5,8,0.92));
+    backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+    padding: 1rem 1.25rem;
+  }
+
+  .navbar-nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}
+
+/* Minimal collapse behavior without Bootstrap JS */
+.collapse {
+  display: none;
+}
+
+.collapse.show {
+  display: block;
+}
+
+@media (min-width: 992px) {
+  .collapse {
+    display: block !important;
+    position: static !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+  }
+}
+
+/* Toggler styling since Bootstrap CSS/JS may be absent */
+.navbar-toggler {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+}
+
+.navbar-toggler:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(88, 230, 255, 0.3);
+}
+
+.navbar-toggler-icon {
+  position: relative;
+  display: inline-block;
+  width: 24px;
+  height: 2px;
+}
+
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 24px;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px;
+}
+
+.navbar-toggler-icon::before {
+  top: -6px;
+}
+
+.navbar-toggler-icon::after {
+  top: 6px;
+}
+
+/* Ensure links align to right on desktop */
+.navbar-nav {
+  margin-left: auto;
+  justify-content: end;
+}

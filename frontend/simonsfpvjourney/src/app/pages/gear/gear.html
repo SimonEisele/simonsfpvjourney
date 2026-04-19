@@ -1,0 +1,46 @@
+<div class="gear-container">
+    <h1 class="gear-title">Gear</h1>
+    <p class="gear-subtitle">My FPV builds and components</p>
+
+    <div class="gear-grid">
+        <div class="gear-card" *ngFor="let drone of drones$ | async">
+            <div class="gear-image">
+                <img [src]="drone.image" [alt]="drone.name" loading="lazy" />
+                <span class="gear-size" *ngIf="drone.size_inch">{{ drone.size_inch }}"</span>
+            </div>
+            <div class="gear-info">
+                <h2 class="gear-name">{{ drone.name }}</h2>
+                <div class="specs">
+                    <div class="spec" *ngIf="drone.frame">
+                        <span class="label">Frame</span>
+                        <span class="value">{{ drone.frame }}</span>
+                    </div>
+                    <div class="spec" *ngIf="drone.motors">
+                        <span class="label">Motors</span>
+                        <span class="value">{{ drone.motors }}</span>
+                    </div>
+                    <div class="spec" *ngIf="drone.esc">
+                        <span class="label">ESC</span>
+                        <span class="value">{{ drone.esc }}</span>
+                    </div>
+                    <div class="spec" *ngIf="drone.flight_controller">
+                        <span class="label">FC</span>
+                        <span class="value">{{ drone.flight_controller }}</span>
+                    </div>
+                    <div class="spec" *ngIf="drone.camera">
+                        <span class="label">Camera</span>
+                        <span class="value">{{ drone.camera }}</span>
+                    </div>
+                    <div class="spec" *ngIf="drone.vtx">
+                        <span class="label">VTX</span>
+                        <span class="value">{{ drone.vtx }}</span>
+                    </div>
+                    <div class="spec" *ngIf="drone.weight_grams">
+                        <span class="label">Weight</span>
+                        <span class="value">{{ drone.weight_grams }} g</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

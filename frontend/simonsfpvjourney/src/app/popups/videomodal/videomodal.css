@@ -1,0 +1,258 @@
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: center; /* horizontal zentriert */
+  align-items: center;     /* vertikal zentriert */
+  z-index: 1000;
+  padding: 20px;
+  box-sizing: border-box;
+  overscroll-behavior: contain; /* prevent background scroll chaining */
+}
+
+.modal-content {
+  position: relative;
+  background-color: #282828;
+  border-radius: 8px;
+  padding: 20px;
+  width: 100%;
+  max-width: 1500px;
+  max-height: 90%;
+  display: flex;
+  gap: 20px;
+  overflow: hidden; /* keep container fixed so nav arrows stay centered */
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.modal-body {
+  display: flex;
+  width: 100%;
+  gap: 20px;
+  overflow: hidden; /* keep overall container fixed; right panel handles its own scroll */
+}
+
+.video-wrapper {
+  position: relative;
+  flex: 0 0 60%; /* 60% Breite links */
+  padding-top: 33.75%; /* 16:9 Ratio (Height / Width) */
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: 8px;
+}
+
+.video-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  color: #ccc;
+  overflow-y: auto;
+  max-height: 100%;
+  gap: 10px;
+  scrollbar-gutter: stable both-edges;
+}
+.video-title {
+  margin-top: 0;
+  font-size: 1.6rem;
+  color: #f3f4f6;
+}
+.video-desc {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #d1d5db;
+}
+.chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  background: #f0f5ff;
+  color: #173b82;
+  border: 1px solid #d5e3ff;
+}
+.chip.category { background: #f0f5ff; color: #173b82; border-color: #d5e3ff; }
+.chip.tag { background: #f0f5ff; color: #173b82; border-color: #d5e3ff; }
+.chip.location { background: #f0f9ff; color: #0b4ea2; border-color: #cce4ff; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+.stat {
+  background: #1f2937;
+  border: 1px solid #374151;
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.stat .label { color: #9ca3af; font-size: 0.9rem; }
+.stat .value { color: #e5e7eb; font-weight: 600; }
+
+.details {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+.detail {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.detail .label { color: #9ca3af; font-size: 0.9rem; }
+.detail .value { color: #e5e7eb; font-weight: 600; }
+
+.close-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 10;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: felx;
+  align-items: center;
+  justify-content: center;
+}
+
+.close-btn svg {
+  width: 24px;
+  height: 24px;
+}
+
+.close-btn:hover svg line {
+  stroke: #ff6666;
+}
+
+/* Navigation arrows */
+.nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(255,255,255,0.3);
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.nav-btn.left { left: 8px; }
+.nav-btn.right { right: 8px; }
+
+@keyframes nextPulse {
+  0%, 100% { transform: translateY(-50%) scale(1); }
+  50% { transform: translateY(-50%) scale(1.08); }
+}
+.nav-btn.right.animate {
+  animation: nextPulse 1.6s ease-in-out infinite;
+}
+.nav-btn.left.animate {
+  animation: nextPulse 1.6s ease-in-out infinite;
+}
+
+/* Responsive für kleine Screens */
+@media (max-width: 768px) {
+  .modal-backdrop { padding: 20px; }
+  .modal-content {
+    flex-direction: column;
+    max-height: 90%; /* match desktop/modal default to keep pages consistent */
+  }
+
+  .modal-body {
+    display: grid;
+    grid-template-rows: auto 1fr; /* video fixed height, info takes remaining space */
+    gap: 12px;
+    min-height: 0;
+    overflow: hidden; /* prevent whole-modal scroll */
+    /* Ensure the grid can consume remaining space inside the modal */
+    flex: 1 1 auto;
+  }
+
+  .video-wrapper {
+    width: 100%;
+    height: 0; /* use padding technique for consistent 16:9 */
+    padding-top: 56.25%; /* 16:9 ratio */
+    position: relative;
+    overflow: hidden; /* clip video edges */
+  }
+
+  .video-info {
+    width: 100%;
+    align-items: flex-start;
+    text-align: left;
+    overflow-y: auto; /* only info scrolls */
+    -webkit-overflow-scrolling: touch;
+    min-height: 0;
+    /* Fill remaining grid row height; scrolling occurs within this region */
+    max-height: none;
+  }
+  .stats, .details { grid-template-columns: 1fr; }
+}
+
+/* Mobile landscape: ensure full iframe visibility and consistent layout */
+@media (max-width: 768px) and (orientation: landscape) {
+  .modal-backdrop { padding: 12px; }
+  .modal-content { max-height: 90%; }
+
+  .modal-body {
+    grid-template-rows: auto 1fr;
+    gap: 10px;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .video-wrapper {
+    width: 100%;
+    height: 48vh; /* keep video fully visible in short landscape viewports */
+    padding-top: 0; /* override 16:9 padding technique */
+    position: relative;
+    overflow: hidden;
+  }
+  .video-wrapper iframe,
+  .video-wrapper .yt-player {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .video-info {
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}

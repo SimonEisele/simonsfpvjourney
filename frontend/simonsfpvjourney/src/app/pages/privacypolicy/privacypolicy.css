@@ -1,0 +1,12 @@
+.legal-page {
+  color: #212529;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+  h1, h2 {
+    color: #111;
+  }
+
+  p {
+    line-height: 1.6;
+  }
+}

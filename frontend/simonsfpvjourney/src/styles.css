@@ -1,0 +1,17 @@
+@import "leaflet/dist/leaflet.css";
+
+/* Leaflet video popup */
+.leaflet-video-popup .leaflet-popup-content-wrapper {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+  box-sizing: border-box;
+}
+.leaflet-video-popup .leaflet-popup-content {
+  margin: 0; /* tighter layout, width controlled by Leaflet options */
+}

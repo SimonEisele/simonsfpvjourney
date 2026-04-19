@@ -1,0 +1,99 @@
+/* Container */
+.gear-container {
+  margin: 1rem auto 2rem;
+  padding: 0 1rem;
+  max-width: 1200px;
+}
+
+.gear-title {
+  text-align: center;
+  font-size: 2.2rem;
+  margin: 0.25rem 0 0.25rem;
+}
+
+.gear-subtitle {
+  text-align: center;
+  color: #667085;
+  margin-bottom: 1.25rem;
+}
+
+/* Grid */
+.gear-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .gear-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Card */
+.gear-card {
+  background: #fff;
+  border: 1px solid #e6e9ef;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(16,24,40,0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.gear-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 32px rgba(16,24,40,0.12);
+}
+
+.gear-image {
+  position: relative;
+}
+.gear-image img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+}
+.gear-size {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(16,24,40,0.8);
+  color: #fff;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+.gear-info {
+  padding: 0.75rem;
+}
+.gear-name {
+  margin: 0 0 0.5rem;
+  font-size: 1.2rem;
+}
+
+.specs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem 1rem;
+}
+.spec {
+  display: grid;
+  border: 1px solid #eef0f5;
+  border-radius: 8px;
+  padding: 0.4rem 0.6rem;
+  background: #fafbff;
+}
+.spec .label {
+  color: #667085;
+}
+.spec .value {
+  font-weight: 600;
+  color: #111827;
+}
+
+@media (max-width: 480px) {
+  .specs {
+    grid-template-columns: 1fr;
+  }
+}

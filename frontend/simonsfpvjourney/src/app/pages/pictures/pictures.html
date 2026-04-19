@@ -1,0 +1,65 @@
+<div class="pictures-container">
+    <h1 class="pictures-title">Pictures</h1>
+    <p class="pictures-subtitle">Some pictures taken at the flying spots</p>
+
+    <div class="pictures-grid">
+        <ng-container *ngIf="pictures.length; else noPictures">
+        <div class="picture-card" *ngFor="let p of pictures">
+            <div class="picture-thumb"
+                 (click)="onThumbClick(p)"
+                 (touchstart)="onThumbTouchStart($event)"
+                 (touchmove)="onThumbTouchMove($event)"
+                 (touchend)="onThumbTouchEnd(p, $event)">
+                <img [src]="p.image" [alt]="p.video_title" draggable="false" />
+            </div>
+            <div class="picture-info">
+                <div class="meta">
+                    <span class="chip" *ngIf="p.video_place">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                    </svg>{{ p.video_place }}
+                    </span>
+                </div>
+                <a class="map-link-btn" [routerLink]="['/']" [queryParams]="{ lat: p.video_latitude, lon: p.video_longitude, zoom: 13 }" (click)="$event.stopPropagation()">Map</a>
+            </div>
+        </div>
+        </ng-container>
+        <ng-template #noPictures>
+            <p style="text-align:center;color:#6b7280;margin-top:1rem;">No pictures found for loaded videos.</p>
+        </ng-template>
+    </div>
+
+    <div
+        class="fullscreen-backdrop"
+        *ngIf="fullscreenPicture as pic"
+        (click)="closeFullscreen()"
+        (touchstart)="onFullscreenTouchStart($event)"
+        (touchend)="onFullscreenTouchEnd($event)">
+        <button
+            class="fullscreen-nav fullscreen-nav-left animate"
+            *ngIf="canPrevFullscreen()"
+            (click)="$event.stopPropagation(); showPrevFullscreen()"
+            aria-label="Previous picture">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+        <button
+            class="fullscreen-nav fullscreen-nav-right animate"
+            *ngIf="canNextFullscreen()"
+            (click)="$event.stopPropagation(); showNextFullscreen()"
+            aria-label="Next picture">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+        </button>
+        <img
+            class="fullscreen-image"
+            [src]="pic.image"
+            [alt]="pic.video_title"
+            (click)="$event.stopPropagation()"
+            (touchstart)="onFullscreenTouchStart($event); $event.stopPropagation()"
+            (touchend)="onFullscreenTouchEnd($event); $event.stopPropagation()" />
+    </div>
+</div>

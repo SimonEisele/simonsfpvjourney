@@ -1,0 +1,47 @@
+<nav class="navbar navbar-dark shadow p-3 mb-4 fixed-top navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" routerLink="/">Simons FPV Journey</a>
+
+    <!-- Mobile Toggle -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      aria-controls="fpvNavbar"
+      [attr.aria-expanded]="isMenuOpen"
+      aria-label="Toggle navigation"
+      (click)="toggleMenu()">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Links -->
+    <div class="collapse navbar-collapse" id="fpvNavbar" [class.show]="isMenuOpen">
+      <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-3">
+
+        <li class="nav-item">
+          <a class="nav-link fpv-link" routerLink="/" [class.active]="isMapActive()" (click)="closeMenu()">
+            Map
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link fpv-link" routerLink="/videos" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">
+            Videos
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link fpv-link" routerLink="/pictures" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">
+            Pictures
+          </a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link fpv-link" routerLink="/gear" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" (click)="closeMenu()">
+            Gear
+          </a>
+        </li>
+
+      </ul>
+    </div>
+  </div>
+</nav>

@@ -32,7 +32,9 @@ export class MapService {
   /** Load Leaflet dynamically */
   async loadLeaflet() {
     if (!this.L) {
-      this.L = await import('leaflet');
+      const leafletModule = await import('leaflet');
+      // Depending on bundling mode, Leaflet can be exposed as default export or module namespace.
+      this.L = (leafletModule as any)?.default ?? leafletModule;
     }
     return this.L;
   }

@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: simonsfpvjourney-frontend
+    env: static
+    rootDir: frontend/simonsfpvjourney
+    buildCommand: npm ci && npm run build:prod
+    staticPublishPath: dist/simonsfpvjourney/browser
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
